@@ -22,4 +22,10 @@ The project was developed as part of hands-on web development practice using HTM
 2. Open `index.html` in a web browser
 
 ## Author
-Chetan Shebannavar
+**Chetan Shebannavar**
+
+## Note
+
+This repository contains a **public version** of PlaceMate.  
+All sensitive information, including real student names and offer letters, has been removed.  
+This version is meant for **demonstration purposes only**, while the original project contains real data privately.
