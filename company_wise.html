@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PlaceMate - Company-wise Details</title>
+
+  <style>
+    th {
+      text-align: center !important;
+      vertical-align: middle !important;
+    }
+    td {
+      text-align: center !important;
+      vertical-align: middle !important;
+    }
+  </style>
+
+
+  <!-- Link to the company-specific CSS (below) -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Bootstrap (kept same as other pages) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div>
+        <img src="https://cache.careers360.mobi/media/colleges/social-media/logo/Logo_of_Basaveshwar_Commerce_College_Bagalkot_Logo.png" alt="Basaveshwar Commerce College Logo">
+      </div>
+      <div class="header-text">
+        <h1>Basaveshwar Engineering College, Bagalkote</h1>
+        <h2>Department of Information Science and Engineering</h2>
+        <div class="portal-name">
+          <h3>PlaceMate – ISE Placement Information Portal</h3>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Student Records
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="students.html">All Students</a>
+          <a class="dropdown-item" href="year_wise.html">Placed Students</a>
+        </div>
+      </li>
+
+      <li><a href="company_wise.html" class="active nav-active">Companies</a></li>
+      <li><a href="login.html">Admin</a></li>
+      <li><a href="#about-us">About Us</a></li>
+    </ul>
+  </nav>
+
+  <main class="container main-content">
+    <section class="welcome-section">
+      <h1>Company-wise Details</h1>
+      <p style="margin-top:8px">Click a company card to view students placed in that company.</p>
+    </section>
+
+    
+
+    <!-- Company cards -->
+    <section class="company-cards" id="companyCards">
+      <!-- Cards are injected by JS -->
+    </section>
+
+
+
+    <!-- Controls row -->
+    <div class="controls-row" id="controlsRow">
+      <div class="filter-section d-flex align-items-center flex-wrap">
+        <label style="margin-right:8px; font-weight:600">Year:</label>
+        <select id="yearFilter" onchange="applyFilters()" class="mr-3 mb-2">
+          <option value="all">All</option>
+          <option value="2020">2020</option>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+        </select>
+
+        <label style="margin-right:8px; font-weight:600">Sort:</label>
+        <select id="sortOption" onchange="applyFilters()" class="mr-3 mb-2">
+          <option value="">None</option>
+          <option value="salaryAsc">Salary (Low → High)</option>
+          <option value="salaryDesc">Salary (High → Low)</option>
+          <option value="yearAsc">Year (Ascending)</option>
+          <option value="yearDesc">Year (Descending)</option>
+        </select>
+
+        <label style="margin-right:8px; font-weight:600">Search:</label>
+        <input type="text" id="searchBox" placeholder="Search by Name / USN" oninput="applyFilters()" class="mr-3 mb-2">
+
+        <!-- New dropdown for column selection -->
+        <div class="dropdown mb-2">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="columnDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select Columns
+          </button>
+          <div class="dropdown-menu" aria-labelledby="columnDropdown">
+            <label class="dropdown-item"><input type="checkbox" data-col="slno" checked onchange="toggleColumn(this)"> Sl. No.</label>
+            <label class="dropdown-item"><input type="checkbox" data-col="usn" checked onchange="toggleColumn(this)"> USN</label>
+            <label class="dropdown-item"><input type="checkbox" data-col="name" checked onchange="toggleColumn(this)"> Name</label>
+            <label class="dropdown-item"><input type="checkbox" data-col="year" checked onchange="toggleColumn(this)"> Year</label>
+            <label class="dropdown-item"><input type="checkbox" data-col="company" checked onchange="toggleColumn(this)"> Company</label>
+            <label class="dropdown-item"><input type="checkbox" data-col="salary" checked onchange="toggleColumn(this)"> Salary</label>
+            <label class="dropdown-item"><input type="checkbox" data-col="offerLetter" checked onchange="toggleColumn(this)"> Offer Letter</label>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div id="loader" class="loader" style="display:none"></div>
+
+    <!-- Student table (hidden until a company is selected) -->
+    <section id="resultsSection" style="display:none; margin-top:20px;">
+      <h3 id="companyTitle">Students placed in <span></span></h3>
+      <div class="table-responsive">
+        <table id="placementTable" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="col-slno">Sl. No.</th>
+              <th class="col-usn">USN</th>
+              <th class="col-name">Name</th>
+              <th class="col-year">Year</th>
+              <th class="col-company">Company</th>
+              <th class="col-salary">Salary</th>
+              <th class="col-offerLetter">Offer Letter</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer id="about-us">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Contact Information</h4>
+        <ul>
+          <li>Address: Basaveshwar Engineering College, Vidyagiri, Bagalkote-587103, Karnataka, India</li>
+          <li>Phone: +91 9448939700 </li>
+          <li>Email: placement@bec.ac.in</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Access</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="year_wise.html">Placement Records</a></li>
+          <li><a href="company_wise.html">Companies</a></li>
+          <li><a href="#about-us">About Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Important Links</h4>
+        <ul>
+          <li><a href="https://becbgk.edu/">BEC Official Website</a></li>
+          <li><a href="https://becbgk.edu/ISE/ISE_Home.php">ISE Department</a></li>
+          <li><a href="https://becbgk.edu/Placement/Placement_Home.html">Placement Cell</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+
+
+
+  <script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbxH-rbO3ARpAzQnyN5vTeDYN5ZNVgLg0YhtM91IJozF730iteioFhh0Ed1w4ainUmYJig/exec";
+
+  const companies = [
+    "TCS", "Cognizant", "Infosys", "Girmiti software",
+    "Insystel", "Redbot", "Pluribus", "Accenture", "Barracuda", "Excelr",
+    "Wipro", "Vodafone", "Mphasis", "CitiusTech", "Pentagon Space",
+    "Vrize", "Zensar", "Persistent", "Hexaware Technologies", "IBM",
+    "HCL", "Bitwise", "Sagarsoft", "NNT", "TeamLease", "Aggne", "Vayavya Labs",
+    "Profound Edutech", "QSpiders", "Skolar", "Innominds", "Mindtree", "Tech Mahindra",
+    "Siemens", "MSys Technologies", "Kyndryl", "GlobalShiksha", "Css Corp", 
+    "DataSuite InfoTech", "KodNest", "Upskillz", "Tata Elxsi", "Coditas Solutions",
+    "Clarivate", "Quest", "Synechron", "Simplilearn", "Andersen IT Solutions", 
+    "AIWOOX", "Urneeds", "Contineo", "Rakuten", "Cargill Business Services India",
+    "GoK", "ADVANCED BUSINESS & HEALTHCARE SOLUTIONS INDIA", "SLK Software Services", 
+    "Global Edge", "Sasken", "Karnataka State Remote Sensing Application", "TSInfo Technologies",
+    "IQVIA", "SkyclipIT", "L & T", "Test Yantra", "Shashi Exports", "Terra Pay", "Infinite",
+    "NTT DATA", "AJAPRO AI Technologies", "Amdocs", "CGI", "G&M Global Solutions", "Deloitte"
+  ];
+
+  const companyLogos = {
+    "TCS": "https://cpl.thalesgroup.com/sites/default/files/content/partners/logo/2021-08/TATA%20Consultancy%20Services%20Limited_logo.png",
+    "Cognizant": "https://cognizant.scene7.com/is/image/cognizant/CognizantLogo400-6",
+    "Infosys": "https://logodix.com/logo/626860.png",
+    "Girmiti software": "https://images.yourstory.com/cs/images/companies/Girmiti-1656058393707.png?fm=auto&ar=1:1&mode=fill&fill=solid&fill-color=fff",
+    "Insystel": "https://insysteltech.com/images/insystel_logosmall.png",
+    "Redbot": "https://images.yourstory.com/cs/images/companies/15672656602901-1669226798482.jpg?fm=auto&ar=1:1&mode=fill&fill=solid&fill-color=fff",
+    "Pluribus": "https://www.arrow.com/globalecs-media/wqifvgr3/pluribus-logo.png",
+    "Accenture": "https://webimages.mongodb.com/kjm0fz23irr3jimno-accenture.png?auto=format%2Ccompress&ch=DPR",
+    "Barracuda": "https://logowik.com/content/uploads/images/barracuda-networks9677.jpg",
+    "Excelr": "https://cdn-images-1.medium.com/v2/resize:fit:1200/1*JK7LPzwNqRL8iBLZKNblnA.png",
+    "Wipro": "https://monomousumi.com/wp-content/uploads/wipro-logo.png",
+    "Vodafone": "https://vanuatuwok.vu/app/uploads/company_logos/2023/11/vodafone-1-1.png",
+    "Mphasis": "https://mma.prnewswire.com/media/690233/Mphasis_Logo.jpg?p=facebook",
+    "CitiusTech": "https://whatthelogo.com/storage/logos/citiustech-286616.png", 
+    "Pentagon Space": "https://static-asset.inc42.com/logo/pentagon-space.png",
+    "Vrize": "https://i.ytimg.com/vi/kc6GtnDdo-E/maxresdefault.jpg",
+    "Zensar": "https://img.etimg.com/thumb/msid-58732403,width-1070,height-580,imgsize-17337,overlay-ettech/photo.jpg", 
+    "Persistent": "https://mma.prnewswire.com/media/1022385/Persistent_Systems_Logo.jpg?p=facebook", 
+    "Hexaware Technologies": "https://mma.prnewswire.com/media/453147/PRNE_Hexaware_logo_Logo.jpg?p=publish",
+    "IBM": "https://logos-world.net/wp-content/uploads/2020/09/IBM-Symbol.jpg",
+    "HCL": "https://logos-world.net/wp-content/uploads/2022/07/HCL-Technologies-Symbol.png", 
+    "Bitwise": "https://cutshort.io/horizontal-og-image?img=https://cdn.cutshort.io/public/companies/59a7da960adfdb705f9665e7/bitwise-inc-logo",
+    "Sagarsoft": "https://sagarsemi.com/wp-content/uploads/2024/03/sagar-soft-300x135.webp", 
+    "NNT": "https://static.vecteezy.com/system/resources/previews/019/841/783/non_2x/nnt-letter-logo-design-on-white-background-nnt-creative-circle-letter-logo-concept-nnt-letter-design-vector.jpg",
+    "TeamLease" : "https://media.glassdoor.com/sqll/4357230/teamlease-squarelogo-1627471029944.png",
+    "Aggne" : "https://image.pitchbook.com/rRKRDpj8905XyyLgWdt1fUx5ECH1721394911949_200x200",
+    "Vayavya Labs" : "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/v1397198513/39fea957a75dc5d1245a41359361ec0c.png",
+    "Profound Edutech" : "https://www.profoundedutech.com/img/logo/profound-logo.png",
+    "QSpiders" : "https://media.glassdoor.com/sql/645563/qspiders-squareLogo-1660034483901.png",
+    "Skolar" : "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/zfiole9fpjlxgwxnzvhf",
+    "Innominds" : "https://mms.businesswire.com/media/20220809005560/en/1540432/23/Innominds_logo.jpg",
+    "Mindtree" : "https://researchscape.com/wp-content/uploads/2019/10/mindtree-logo-980x275-1.png",
+    "Tech Mahindra" : "https://download.logo.wine/logo/Tech_Mahindra/Tech_Mahindra-Logo.wine.png",
+    "Siemens" : "https://i.ytimg.com/vi/5i0UyTmPTCI/maxresdefault.jpg", 
+    "MSys Technologies" : "https://media-exp1.licdn.com/dms/image/C4D0BAQHEqRCTkimHRw/company-logo_200_200/0/1641536967596?e=2159024400&v=beta&t=TSXNPxvgTwPgBNLZMhhE7iEwxC0fzMxLrp2vZfEq1LI", 
+    "Kyndryl" : "https://tibahia.com/wp-content/uploads/2021/11/kyndryl-marca.jpg", 
+    "GlobalShiksha" : "https://cdn.shopify.com/s/files/1/0555/4598/7354/files/newlogo_1.png?v=1665751694&width=400", 
+    "Css Corp" : "https://aniportalimages.s3.amazonaws.com/media/details/CSS_ANI_DVAJfia_nPQpgRG.jpg", 
+    "DataSuite InfoTech" : "https://www.sonotec.de/fileadmin/_processed_/8/b/csm_logo_sonaphone_datasuite_sonotec_2_0059bc9a07.png", 
+    "KodNest" : "https://media-exp1.licdn.com/dms/image/C4E1BAQG4eQJBYSe4WA/company-background_10000/0/1568800199727?e=2147483647&v=beta&t=HBZBPrrX0CEgVHloxgn0mfeL-zVsWGXrRTF8TitG0R8", 
+    "Upskillz" : "https://upskillz.ph/cdn/shop/files/Upskillz_logo.png?height=628&pad_color=ffffff&v=1751202430&width=1200", 
+    "Tata Elxsi" : "https://images.yourstory.com/cs/images/companies/1300x300-1619160734537.jpg?fm=auto&ar=1:1&mode=fill&fill=solid&fill-color=fff",
+    "Coditas Solutions" : "https://media.designrush.com/agencies/101794/conversions/Coditas-logo-profile.jpg",
+    "Clarivate" : "https://images.squarespace-cdn.com/content/v1/5558af78e4b0c59a4549114c/1603964893442-WT1KSI1455GECGWMUTGQ/Clarivate+Logo.jpg",
+    "Quest" : "https://qcausa.com/wp-content/uploads/2021/08/Quest-logo-2021-Color.png",
+    "Synechron" : "https://images.seeklogo.com/logo-png/39/1/synechron-logo-png_seeklogo-393576.png", 
+    "Simplilearn" : "https://self-starters.com/wp-content/uploads/2020/07/simplilearn_review_2020.jpg", 
+    "Andersen IT Solutions" : "https://sumatosoft.com/wp-content/uploads/2023/04/andersen-logo.jpg", 
+    "AIWOOX" : "https://aiwoox.com/wp-content/uploads/2024/12/aiwoox-web-logo-transparesnt.png", 
+    "Urneeds" : "https://www.urneeds.co.uk/wp-content/uploads/2021/11/logo.png", 
+    "Contineo" : "https://nicolamariani.es/wp-content/uploads/2021/03/LOGO-CONTINEO-4.png", 
+    "Rakuten" : "https://toppng.com/public/uploads/preview/rakuten-logo-in-vector-free-download-11573908903qlhvukpju0.png", 
+    "Cargill Business Services India" : "https://static.ambitionbox.com/alpha/company/photos/logos/cargill.jpg",
+    "GoK" : "https://c8.alamy.com/comp/2RCTFAG/gok-logo-gok-letter-gok-letter-logo-design-initials-gok-logo-linked-with-circle-and-uppercase-monogram-logo-gok-typography-for-technology-busines-2RCTFAG.jpg", 
+    "ADVANCED BUSINESS & HEALTHCARE SOLUTIONS INDIA" : "https://www.transalis.com/wp-content/uploads/2022/11/oneadvanced-uai-1000x750.jpg", 
+    "SLK Software Services" : "https://www.gartner.com/pi/vendorimages/slk-software_1664450075436.png", 
+    "Global Edge" : "https://globaledgeinvestments.com/content/uploads/logobuild.png", 
+    "Sasken" : "https://download.logo.wine/logo/Sasken_Technologies/Sasken_Technologies-Logo.wine.png", 
+    "Karnataka State Remote Sensing Application" : "https://img.studyclap.com/img/institute/logo/d1362e05d1-ksrsac-bangalore.jpg", 
+    "TSInfo Technologies" : "https://images.crunchbase.com/image/upload/c_pad,h_256,w_256,f_auto,q_auto:eco,dpr_1/xfdkzf1qxhwymjpwye0b",
+    "IQVIA" : "https://tukuz.com/wp-content/uploads/2019/08/iqvia-logo-vector.png", 
+    "SkyclipIT" : "https://logos-world.net/wp-content/uploads/2021/02/Sky-Logo-1989-1993.png", 
+    "L & T" : "https://images.seeklogo.com/logo-png/24/1/larsen-toubro-limited-logo-png_seeklogo-248535.png", 
+    "Test Yantra" : "https://media.glassdoor.com/sqll/661369/test-yantra-squarelogo-1578577143730.png", 
+    "Shashi Exports" : "https://media-exp1.licdn.com/dms/image/C4D0BAQFdwRuJpw-6iQ/company-logo_200_200/0/1640147417199?e=2147483647&v=beta&t=v_eu8n_bVxYOQc9sIfV_YanGi4Bo5XP-GpFQISKM20U", 
+    "Terra Pay" : "https://vsdaily.com/wp-content/uploads/2020/06/terrapay-logo.jpg", 
+    "Infinite" : "https://www.infinite.com/wp-content/uploads/2023/04/Infinite.jpg",
+    "NTT DATA" : "https://img-kariyer.mncdn.com/mnpadding/1200/630/FFFFFF/UploadFiles/Clients/SquareLogo/753/4753_263926.jpg", 
+    "AJAPRO AI Technologies" : "https://cdn-thumbnails.huggingface.co/social-thumbnails/AjaproAITechnologies.png", 
+    "Amdocs" : "https://www.allot.com/resources/Header_Logos_Solutions_amdocs.jpg", 
+    "CGI" : "https://www.collegealma.ca/medias/2019/02/Logo_CGI.png", 
+    "G&M Global Solutions" : "https://fundacionindustrialnavarra.com/wp-content/uploads/2020/10/20038.-GM-GLOBAL-SOLUTIONS.jpg", 
+    "Deloitte" : "https://c8.alamy.com/comp/P1KG0R/aalborg-denmark-july13-2017-deloitte-logo-on-a-wall-deloitte-is-one-of-the-big-four-accounting-firms-P1KG0R.jpg"
+  };
+
+  let allData = [];
+  let selectedCompany = null;
+
+  const loader = document.getElementById('loader');
+  const companyCardsEl = document.getElementById('companyCards');
+  const resultsSection = document.getElementById('resultsSection');
+  const companyTitleSpan = document.querySelector('#companyTitle span');
+  const table = document.getElementById('placementTable');
+  const controlsRow = document.getElementById('controlsRow');
+
+  controlsRow.style.display = 'none';
+
+  function createCompanyCards() {
+    companies.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'company-card';
+      const logo = companyLogos[c];
+      if (logo) {
+        div.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.28)), url('${logo}')`;
+        div.style.backgroundSize = 'cover';
+        div.style.backgroundPosition = 'center';
+      } else {
+        div.classList.add('no-logo');
+      }
+      div.innerHTML = `<div class="card-overlay"><h3>${c}</h3></div>`;
+      div.onclick = (e) => onCompanyClick(c, e);
+      companyCardsEl.appendChild(div);
+    });
+  }
+
+  function fetchData() {
+    loader.style.display = 'block';
+    fetch(scriptURL)
+      .then(resp => resp.json())
+      .then(data => {
+        allData = (data || []).map(r => ({
+          usn: (r.usn || "").trim(),
+          name: (r.name || "").trim(),
+          year: (r.year || "").toString().trim(),
+          company: (r.company || "").trim(),
+          salary: (r.salary || "").trim(),
+          offerLetter: (r.offerLetter || "").trim()
+        }));
+        loader.style.display = 'none';
+        createCompanyCards();
+      })
+      .catch(() => {
+        loader.style.display = 'none';
+        createCompanyCards();
+        alert("⚠ Unable to fetch data. Check your script URL.");
+      });
+  }
+
+  function onCompanyClick(companyName, event) {
+    selectedCompany = companyName;
+    companyTitleSpan.textContent = companyName;
+
+    document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+
+    controlsRow.style.display = 'block';
+    resultsSection.style.display = 'block';
+    window.scrollTo({ top: resultsSection.offsetTop - 20, behavior: 'smooth' });
+
+    applyFilters();
+  }
+
+  function applyFilters() {
+    let rows = [...allData];
+
+    // ✅ Company filtering: check if any company in student's list matches the selected one
+    if (selectedCompany) {
+      rows = rows.filter(r => {
+        const comps = r.company.split('|').map(c => c.trim().toLowerCase());
+        return comps.includes(selectedCompany.toLowerCase());
+      });
+    } else rows = [];
+
+    // ✅ Year filter
+    const year = document.getElementById('yearFilter').value;
+    if (year !== 'all') rows = rows.filter(r => r.year === year);
+
+    // ✅ Search filter
+    const q = (document.getElementById('searchBox').value || '').trim().toLowerCase();
+    if (q) rows = rows.filter(r =>
+      (r.name || '').toLowerCase().includes(q) ||
+      (r.usn || '').toLowerCase().includes(q)
+    );
+
+    // ✅ Sorting
+    const sortOpt = document.getElementById('sortOption').value;
+    if (sortOpt.startsWith('salary')) {
+      rows.sort((a, b) => getMaxSalary(a.salary) - getMaxSalary(b.salary));
+      if (sortOpt === 'salaryDesc') rows.reverse();
+    } else if (sortOpt === 'yearAsc') {
+      rows.sort((a, b) => a.year.localeCompare(b.year));
+    } else if (sortOpt === 'yearDesc') {
+      rows.sort((a, b) => b.year.localeCompare(a.year));
+    }
+
+    renderTable(rows);
+  }
+
+  // Helper to get max numeric salary from multi-value string
+  function getMaxSalary(s) {
+    if (!s) return 0;
+    const nums = s.split('|')
+      .map(v => parseFloat(v.replace(/[^\d.]/g, ''))) // Extract numbers
+      .filter(n => !isNaN(n));
+    return nums.length ? Math.max(...nums) : 0;
+  }
+
+  function renderTable(rows) {
+    const tbody = table.querySelector('tbody');
+    tbody.innerHTML = '';
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No records found.</td></tr>`;
+      return;
+    }
+    // rows.forEach(r => {
+    //   const tr = document.createElement('tr');
+    //   tr.innerHTML = `
+    //     <td class="col-usn">${escapeHtml(r.usn)}</td>
+    //     <td class="col-name">${escapeHtml(r.name)}</td>
+    //     <td class="col-year">${escapeHtml(r.year)}</td>
+    //     <td class="col-company">${escapeHtml(r.company)}</td>
+    //     <td class="col-salary">${escapeHtml(r.salary)}</td>
+    //     <td class="col-offerLetter">${
+    //       r.offerLetter
+    //         ? `<a class="offer-link" href="${escapeAttr(r.offerLetter)}" target="_blank">View</a>`
+    //         : 'NA'
+    //     }</td>
+    //   `;
+    //   tbody.appendChild(tr);
+    // });
+
+
+      let count = 1;
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="col-slno">${count++}</td>
+          <td class="col-usn">${escapeHtml(r.usn)}</td>
+          <td class="col-name">${escapeHtml(r.name)}</td>
+          <td class="col-year">${escapeHtml(r.year)}</td>
+          <td class="col-company">${escapeHtml(r.company)}</td>
+          <td class="col-salary">${escapeHtml(r.salary)}</td>
+          <td class="col-offerLetter">${
+            r.offerLetter
+              ? `<a class="offer-link" href="${escapeAttr(r.offerLetter)}" target="_blank">View</a>`
+              : 'NA'
+          }</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+
+  }
+
+  function escapeHtml(s) {
+    if (!s && s !== 0) return '';
+    return s.toString().replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+  }
+
+  function escapeAttr(s) {
+    return escapeHtml(s).replace(/"/g, '&quot;');
+  }
+
+  function toggleColumn(checkbox) {
+    const col = checkbox.getAttribute('data-col');
+    const visible = checkbox.checked;
+    document.querySelectorAll('.col-' + col).forEach(el => {
+      el.style.display = visible ? '' : 'none';
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', fetchData);
+</script>
+
+
+
+
+
+
+  <style>
+    /* small inline helper to keep default table column visibility in sync on first render */
+    /* The main CSS is in company_wise.css */
+  </style>
+</body>
+</html>

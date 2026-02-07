@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - PlaceMate</title>
+
+  <!-- Existing site styling -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Bootstrap (for consistent layout) -->
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  />
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+    /* Dashboard-specific enhancement */
+    body {
+      background-color: #f5f7fa;
+    }
+
+    .dashboard-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-container h2 {
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 30px;
+      color: #002b5c;
+    }
+
+    .admin-options button {
+      width: 100%;
+      margin-bottom: 15px;
+      font-weight: 500;
+      padding: 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .admin-options button:hover {
+      transform: scale(1.03);
+    }
+
+    .section-card {
+      display: none;
+      margin-top: 30px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background: #fafafa;
+    }
+
+    .section-card h4 {
+      margin-bottom: 15px;
+      color: #333;
+      border-bottom: 2px solid #0056b3;
+      padding-bottom: 5px;
+      font-weight: 600;
+    }
+
+    input.form-control {
+      border-radius: 8px;
+    }
+
+    .btn {
+      border-radius: 8px;
+    }
+
+    #addMsg, #deleteMsg, #editMsg {
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    footer {
+      margin-top: 40px;
+      background-color: #002b5c;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header & Navbar (same as other pages) -->
+  <header>
+    <div class="header-content">
+      <div>
+        <img src="https://cache.careers360.mobi/media/colleges/social-media/logo/Logo_of_Basaveshwar_Commerce_College_Bagalkot_Logo.png"
+          alt="Basaveshwar College Logo" />
+      </div>
+      <div class="header-text">
+        <h1>Basaveshwar Engineering College, Bagalkote</h1>
+        <h2>Department of Information Science and Engineering</h2>
+        <div class="portal-name">
+          <h3>PlaceMate – ISE Placement Information Portal</h3>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Student Records
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="students.html">All Students</a>
+          <a class="dropdown-item" href="year_wise.html">Placed Students</a>
+        </div>
+      </li>
+
+      <li><a href="company_wise.html">Companies</a></li>
+      <li><a href="login.html" class="active nav-active">Admin</a></li>
+      <li><a href="index.html#about-us">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Dashboard Section -->
+  <div class="dashboard-container">
+    <h2>Admin Dashboard</h2>
+
+    <div class="admin-options text-center mb-4">
+      <button class="btn btn-success" onclick="openAdd()">➕ Add Student Record</button>
+      <button class="btn btn-danger" onclick="openDelete()">🗑 Delete Student Record</button>
+      <button class="btn btn-warning" onclick="openEdit()">✏️ Edit Student Record</button>
+    </div>
+
+    <!-- Add Record Section -->
+    <div id="addSection" class="section-card">
+      <h4>Add New Placement Record</h4>
+      <form id="addForm">
+        <input type="text" id="add_usn" name="usn" class="form-control mb-2" placeholder="USN" required>
+        <input type="text" id="add_name" name="name" class="form-control mb-2" placeholder="Name" required>
+        <input type="number" id="add_year" name="year" class="form-control mb-2" placeholder="Year" required>
+        <input type="text" id="add_company" name="company" class="form-control mb-2" placeholder="Company" required>
+        <input type="text" id="add_salary" name="salary" class="form-control mb-2" placeholder="Salary (If not available, then type 'NA')" required>
+        <input type="url" id="add_offer" name="offerLetter" class="form-control mb-3" placeholder="Offer Letter URL (If not available, then leave empty)">
+        <button type="submit" class="btn btn-success">Add Record</button>
+      </form>
+      <p id="addMsg"></p>
+    </div>
+
+    <!-- Delete Section -->
+    <div id="deleteSection" class="section-card">
+      <h4>Delete Student Record</h4>
+      <input type="text" id="delete_usn" class="form-control mb-3" placeholder="Enter USN to delete">
+      <button class="btn btn-danger" onclick="deleteRecord()">Delete</button>
+      <p id="deleteMsg"></p>
+    </div>
+
+    <!-- Edit Section -->
+    <div id="editSection" class="section-card">
+      <h4>Edit Student Record</h4>
+      <input type="text" id="edit_usn" class="form-control mb-3" placeholder="Enter USN to Edit">
+      <button class="btn btn-primary mb-3" onclick="fetchStudent()">Load Details</button>
+
+      <div id="editFormContainer" style="display:none;">
+        <input type="text" id="edit_name" class="form-control mb-2" placeholder="Name">
+        <input type="number" id="edit_year" class="form-control mb-2" placeholder="Year">
+        <input type="text" id="edit_company" class="form-control mb-2" placeholder="Company">
+        <input type="text" id="edit_salary" class="form-control mb-2" placeholder="Salary">
+        <input type="url" id="edit_offer" class="form-control mb-3" placeholder="Offer Letter URL">
+        <button class="btn btn-warning" onclick="editRecord()">Save Changes</button>
+      </div>
+
+      <p id="editMsg"></p>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 BCEISE PlaceMate. All rights reserved.
+  </footer>
+
+
+
+
+
+  
+  <script>
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxH-rbO3ARpAzQnyN5vTeDYN5ZNVgLg0YhtM91IJozF730iteioFhh0Ed1w4ainUmYJig/exec"; // ⚠️ Replace with your deployed Apps Script Web App URL
+
+    function isValidYear(year) {
+    const currentYear = new Date().getFullYear();
+    return year <= currentYear;
+  } 
+
+    function hideAll() {
+      document.getElementById("addSection").style.display = "none";
+      document.getElementById("deleteSection").style.display = "none";
+      document.getElementById("editSection").style.display = "none";
+    }
+
+    function openAdd() {
+  hideAll();
+  const section = document.getElementById("addSection");
+  section.style.display = "block";
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function openDelete() {
+  hideAll();
+  const section = document.getElementById("deleteSection");
+  section.style.display = "block";
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function openEdit() {
+  hideAll();
+  const section = document.getElementById("editSection");
+  section.style.display = "block";
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+
+    // ✅ ADD RECORD (now allows empty Offer Letter URL)
+   document.getElementById("addForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const year = parseInt(add_year.value.trim());
+  const currentYear = new Date().getFullYear();
+
+  if (year > currentYear) {
+    addMsg.textContent = `❌ Year cannot be greater than ${currentYear}.`;
+    addMsg.style.color = "red";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("action", "add");
+  formData.append("usn", add_usn.value.trim());
+  formData.append("name", add_name.value.trim());
+  formData.append("year", year);
+  formData.append("company", add_company.value.trim());
+  formData.append("salary", add_salary.value.trim());
+  formData.append("offerLetter", add_offer.value.trim() || "");
+
+  fetch(scriptURL, { method: "POST", body: formData })
+    .then(r => r.json())
+    .then(d => {
+      addMsg.textContent = d.result;
+      addMsg.style.color = "green";
+    })
+    .catch(() => {
+      addMsg.textContent = "⚠️ Failed to add record.";
+      addMsg.style.color = "red";
+    });
+});
+
+
+
+    // ✅ DELETE RECORD
+    function deleteRecord() {
+      const usn = delete_usn.value.trim();
+      if (!usn) return alert("Enter USN first");
+      if (!confirm("Are you sure to delete this record?")) return;
+
+      const formData = new FormData();
+      formData.append("action", "delete");
+      formData.append("usn", usn);
+
+      fetch(scriptURL, { method: "POST", body: formData })
+        .then(r => r.json())
+        .then(d => deleteMsg.textContent = d.result)
+        .catch(() => deleteMsg.textContent = "⚠️ Failed to delete record.");
+    }
+
+    // ✅ FETCH STUDENT DATA FOR EDITING
+    function fetchStudent() {
+      const usn = edit_usn.value.trim();
+      if (!usn) return alert("Enter USN to load details");
+
+      fetch(scriptURL)
+        .then(r => r.json())
+        .then(data => {
+          const s = data.find(x => (x.usn || "").trim().toLowerCase() === usn.toLowerCase());
+          if (!s) {
+            editMsg.textContent = "❌ USN not found.";
+            document.getElementById("editFormContainer").style.display = "none";
+            return;
+          }
+          document.getElementById("editFormContainer").style.display = "block";
+          edit_name.value = s.name;
+          edit_year.value = s.year;
+          edit_company.value = s.company;
+          edit_salary.value = s.salary;
+          edit_offer.value = s.offerLetter;
+          editMsg.textContent = "";
+        })
+        .catch(() => editMsg.textContent = "⚠️ Failed to fetch data.");
+    }
+
+    // ✅ EDIT RECORD
+    function editRecord() {
+  const year = parseInt(edit_year.value.trim());
+  const currentYear = new Date().getFullYear();
+
+  if (year > currentYear) {
+    editMsg.textContent = `❌ Year cannot be greater than ${currentYear}.`;
+    editMsg.style.color = "red";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("action", "edit");
+  formData.append("usn", edit_usn.value.trim());
+  formData.append("name", edit_name.value.trim());
+  formData.append("year", year);
+  formData.append("company", edit_company.value.trim());
+  formData.append("salary", edit_salary.value.trim());
+  formData.append("offerLetter", edit_offer.value.trim());
+
+  fetch(scriptURL, { method: "POST", body: formData })
+    .then(r => r.json())
+    .then(d => {
+      editMsg.textContent = d.result;
+      editMsg.style.color = "green";
+    })
+    .catch(() => {
+      editMsg.textContent = "⚠️ Failed to update record.";
+      editMsg.style.color = "red";
+    });
+}
+
+
+
+  </script>
+
+</body>
+</html>

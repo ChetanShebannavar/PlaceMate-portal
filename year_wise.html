@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlaceMate - Placed Students</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <style>
+    .dropdown-checkbox-menu {
+      padding: 10px;
+      min-width: 180px;
+    }
+    .dropdown-checkbox-menu label {
+      display: block;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+    .dropdown-checkbox-menu input {
+      margin-right: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-content">
+    <div>
+      <img src="https://cache.careers360.mobi/media/colleges/social-media/logo/Logo_of_Basaveshwar_Commerce_College_Bagalkot_Logo.png">
+    </div>
+    <div class="header-text">
+      <h1>Basaveshwar Engineering College, Bagalkote</h1>
+      <h2>Department of Information Science and Engineering</h2>
+      <div class="portal-name">
+        <h3>PlaceMate – ISE Placement Information Portal</h3>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle nav-active" data-toggle="dropdown">
+        Student Records
+      </a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="students.html">All Students</a>
+        <a class="dropdown-item" href="year_wise.html">Placed Students</a>
+      </div>
+    </li>
+
+    <li><a href="company_wise.html">Companies</a></li>
+    <li><a href="login.html">Admin</a></li>
+    <li><a href="#about-us">About Us</a></li>
+  </ul>
+</nav>
+
+<br>
+
+<section class="welcome-section">
+  <h1>Placement Details</h1>
+</section>
+
+<!-- Filter + Search + Sort Section -->
+<div class="filter-section d-flex justify-content-between flex-wrap align-items-center">
+  <div>
+    <select id="yearFilter" onchange="filterYear(this.value)">
+      <option value="all">All</option>
+      <option value="2020">2020</option>
+      <option value="2021">2021</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+    </select>
+  </div>
+
+  <div class="search-sort d-flex align-items-center">
+    <input type="text" id="searchBox" class="form-control mr-2"
+           placeholder="Search by Name/Company/USN"
+           onkeyup="searchTable()">
+
+    <div class="dropdown mr-2">
+      <button class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="columnDropdown"
+              data-toggle="dropdown">
+        Select Columns
+      </button>
+
+      <div class="dropdown-menu dropdown-checkbox-menu">
+        <label><input type="checkbox" value="0" checked onchange="toggleColumns()"> Sl. No.</label>
+        <label><input type="checkbox" value="1" checked onchange="toggleColumns()"> USN</label>
+        <label><input type="checkbox" value="2" checked onchange="toggleColumns()"> Name</label>
+        <label><input type="checkbox" value="3" checked onchange="toggleColumns()"> Year</label>
+        <label><input type="checkbox" value="4" checked onchange="toggleColumns()"> Company</label>
+        <label><input type="checkbox" value="5" checked onchange="toggleColumns()"> Salary</label>
+        <label><input type="checkbox" value="6" checked onchange="toggleColumns()"> Offer Letter</label>
+      </div>
+    </div>
+
+    <select id="sortOption" class="form-control" onchange="sortTable()">
+      <option value="">Sort By</option>
+      <option value="salaryAsc">Salary (Low → High)</option>
+      <option value="salaryDesc">Salary (High → Low)</option>
+      <option value="yearAsc">Year (Ascending)</option>
+      <option value="yearDesc">Year (Descending)</option>
+    </select>
+  </div>
+</div>
+
+<div id="loader" class="loader"></div>
+
+<div class="table-container">
+  <table id="placementTable" class="table table-bordered table-striped mt-3" style="display:none;">
+    <thead>
+      <tr style="text-align:center;">
+        <th>Sl. No.</th>
+        <th>USN</th>
+        <th>Name</th>
+        <th>Year</th>
+        <th>Company</th>
+        <th>Salary</th>
+        <th>Offer Letter</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<footer id="about-us">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Contact Information</h4>
+        <ul>
+          <li>Address: Basaveshwar Engineering College, Vidyagiri, Bagalkote-587103, Karnataka, India</li>
+          <li>Phone: +91 9448939700 </li>
+          <li>Email: placement@bec.ac.in</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Access</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="year_wise.html">Placement Records</a></li>
+          <li><a href="company_wise.html">Companies</a></li>
+          <li><a href="#about-us">About Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Important Links</h4>
+        <ul>
+          <li><a href="https://becbgk.edu/">BEC Official Website</a></li>
+          <li><a href="https://becbgk.edu/ISE/ISE_Home.php">ISE Department</a></li>
+          <li><a href="https://becbgk.edu/Placement/Placement_Home.html">Placement Cell</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+<script>
+const scriptURL =
+"https://script.google.com/macros/s/AKfycbxH-rbO3ARpAzQnyN5vTeDYN5ZNVgLg0YhtM91IJozF730iteioFhh0Ed1w4ainUmYJig/exec";
+
+let allData = [];
+let currentYear = "all";
+let currentSearch = "";
+let currentSort = "";
+
+const loader = document.getElementById("loader");
+const table = document.getElementById("placementTable");
+
+fetch(scriptURL)
+  .then(res => res.json())
+  .then(data => {
+
+    allData = data
+      .map(row => ({
+        usn: (row.usn || "").trim(),
+        name: (row.name || "").trim(),
+        year: (row.year || "").toString().trim(),
+        company: (row.company || "").trim(),
+        salary: (row.salary || "").trim(),
+        offerLetter: (row.offerletter || "").trim(),
+        placed: (row.placed || "").trim()
+      }))
+      // ✅ ONLY PLACED STUDENTS
+      .filter(r => r.placed.toLowerCase() === "yes");
+
+    loader.style.display = "none";
+    table.style.display = "table";
+    applyFilters();
+  });
+
+function applyFilters() {
+  let result = [...allData];
+
+  if (currentYear !== "all") {
+    result = result.filter(r => r.year === currentYear);
+  }
+
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    result = result.filter(r =>
+      r.name.toLowerCase().includes(q) ||
+      r.company.toLowerCase().includes(q) ||
+      r.usn.toLowerCase().includes(q)
+    );
+  }
+
+  if (currentSort === "salaryAsc")
+    result.sort((a,b) => getMaxSalary(a.salary) - getMaxSalary(b.salary));
+  else if (currentSort === "salaryDesc")
+    result.sort((a,b) => getMaxSalary(b.salary) - getMaxSalary(a.salary));
+  else if (currentSort === "yearAsc")
+    result.sort((a,b) => a.year.localeCompare(b.year));
+  else if (currentSort === "yearDesc")
+    result.sort((a,b) => b.year.localeCompare(a.year));
+
+  renderTable(result);
+}
+
+function renderTable(rows) {
+  const tbody = table.querySelector("tbody");
+  tbody.innerHTML = "";
+
+  const grouped = rows.reduce((acc,r)=>{
+    acc[r.year] = acc[r.year] || [];
+    acc[r.year].push(r);
+    return acc;
+  },{});
+
+  Object.keys(grouped).sort((a,b)=>b-a).forEach(year=>{
+    const yr = document.createElement("tr");
+    yr.innerHTML = `<td colspan="7" style="background:#e6f7ff;font-weight:bold">${year} Placed Students</td>`;
+    tbody.appendChild(yr);
+
+    let count = 1;
+    grouped[year].forEach(r=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${count++}</td>
+        <td>${r.usn}</td>
+        <td>${r.name}</td>
+        <td>${r.year}</td>
+        <td>${r.company}</td>
+        <td>${r.salary}</td>
+        <td>${r.offerLetter ? `<a href="${r.offerLetter}" target="_blank">View</a>` : "NA"}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+
+  toggleColumns();
+}
+
+function getMaxSalary(s){
+  if(!s) return 0;
+  const nums = s.split('|').map(v=>parseFloat(v.replace(/[^\d.]/g,''))).filter(n=>!isNaN(n));
+  return nums.length ? Math.max(...nums) : 0;
+}
+
+function filterYear(y){ currentYear=y; applyFilters(); }
+function searchTable(){ currentSearch=document.getElementById("searchBox").value; applyFilters(); }
+function sortTable(){ currentSort=document.getElementById("sortOption").value; applyFilters(); }
+
+function toggleColumns(){
+  const checkboxes=document.querySelectorAll('.dropdown-checkbox-menu input');
+  for(let i=0;i<table.rows.length;i++){
+    for(let j=0;j<table.rows[i].cells.length;j++){
+      const chk=[...checkboxes].find(cb=>+cb.value===j)?.checked;
+      table.rows[i].cells[j].style.display = chk ? "" : "none";
+    }
+  }
+}
+</script>
+
+</body>
+</html>

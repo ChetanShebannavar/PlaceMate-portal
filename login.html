@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlaceMate- Admin</title>
+
+
+    <link rel="stylesheet" href="style.css">
+
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+
+ 
+</head>
+<body>
+
+  <header>
+        <div class="header-content">
+            <div>
+                <img src="https://cache.careers360.mobi/media/colleges/social-media/logo/Logo_of_Basaveshwar_Commerce_College_Bagalkot_Logo.png" alt="Basaveshwar Commerce College Logo" style="mr-auto;">
+            </div>
+            <div class="header-text">
+                <h1>Basaveshwar Engineering College, Bagalkote</h1>
+                <h2>Department of Information Science and Engineering</h2>
+                <div class="portal-name">
+                    <h3>PlaceMate – ISE Placement Information Portal</h3>
+                </div>
+            </div>
+        </div>
+    </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Student Records
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="students.html">All Students</a>
+          <a class="dropdown-item" href="year_wise.html">Placed Students</a>
+        </div>
+      </li>
+
+      <li><a href="company_wise.html">Companies</a></li>
+      <li><a href="login.html" class="nav-active">Admin</a></li>
+      <li><a href="index.html#about-us">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="signup-container">
+    <div class="signup-box">
+      <h2>Sign-In</h2>
+      <form id="signupForm">
+        <input type="text" id="username" placeholder="Enter Username" required>
+        <input type="password" id="password" placeholder="Enter Password" required>
+        <button type="submit">Sign-In</button>
+      </form>
+      <div id="message" class="message"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent page reload
+
+      let user = document.getElementById("username").value;
+      let pass = document.getElementById("password").value;
+      let messageBox = document.getElementById("message");
+
+      if (user === "BECISE" && pass === "12345") {
+        messageBox.textContent = "✅ Login Successful! Welcome, " + user;
+        messageBox.className = "message success";
+         window.location.href = "admin_dashboard.html";
+      } else {
+        messageBox.textContent = "❌ Invalid Username or Password!";
+        messageBox.className = "message error";
+      }
+    });
+  </script>
+
+</body>
+</html>
